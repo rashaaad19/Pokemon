@@ -1,21 +1,87 @@
 import axios from "axios";
 import { json, useLoaderData } from "react-router";
+import styled from "styled-components";
+
+
+
+
+
+  //Styled components
+
+  const Wrapper = styled.div`
+    background-color: #000000e8;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `;
+  const PokemonHeader = styled.h1`
+    color: orangered;
+    font-size: 60px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    text-transform: capitalize;
+  `;
+  const PokemonInfo = styled.p`
+    color: whitesmoke;
+    font-size: 20px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    text-transform: capitalize;
+  `;
+  const PokemonAbilities = styled.span`
+    color: whitesmoke;
+    font-size: 20px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    text-transform: capitalize;
+  `;
+  const InfoWrapper = styled.div``;
+
 
 const PokemonPage = () => {
+
   const pokemonData = useLoaderData();
   console.log(pokemonData);
+
+
+
+  //functions
+
+    // Extract the abilities and processing the text
+  const abilities = pokemonData.abilities.map((pokemon) => {
+    //Capitalizing first character in the ability
+    const capitalizedName =
+      pokemon.ability.name.charAt(0).toUpperCase() +
+      pokemon.ability.name.slice(1);
+    return capitalizedName;
+  });
+
+  //Extracte the stats of each pokemon
+  const stats=pokemonData.stats.map(pokemon=>{
+
+    return{name:pokemon.stat.name,stat:pokemon.base_stat}
+  })
+console.log(stats)
+
   return (
     <>
-      <h1>{pokemonData.name}</h1>
-      {pokemonData.abilities.map((pokemon) => (
-        <p key={pokemon.ability.name}>{pokemon.ability.name}</p>
-      ))}
-      <p>{pokemonData.base_experience}</p>
-      <p>{pokemonData.height}</p>
-      <p>{pokemonData.weight}</p>
-      <img src={pokemonData.sprites.other.dream_world.front_default} alt="Pokemon"/>
+      <Wrapper>
+        <PokemonHeader>{pokemonData.name}</PokemonHeader>
+        <img src={pokemonData.sprites.other.home.front_default} alt="Pokemon" />
+        <InfoWrapper>
+          <PokemonAbilities>Pokemon Abilities : </PokemonAbilities>
 
+          {/* Seperating each ability with comma */}
+          <PokemonAbilities>{abilities.join(" , ")}</PokemonAbilities>
 
+          <PokemonInfo>
+            Base Experience : {pokemonData.base_experience}
+          </PokemonInfo>
+          <PokemonInfo>Height : {pokemonData.height}</PokemonInfo>
+          <PokemonInfo>Weight : {pokemonData.weight}</PokemonInfo>
+        </InfoWrapper>
+      </Wrapper>
     </>
   );
 };
