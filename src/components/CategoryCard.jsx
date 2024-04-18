@@ -3,6 +3,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+
+
 //     Styled Components
 
 const CardList = styled.ul`
@@ -31,19 +33,21 @@ const retrieveCategories = async () => {
 };
 
 const CategoryCard = () => {
-
+  // Destructure the returned object from useQuery
   const {
-    data: categories,
-    error,
-    isLoading,
+    data: categories, // Data fetched from the query, named 'categories'
+    error, // Error object if the query failed
+    isLoading, // Boolean indicating if the query is still loading
   } = useQuery({
-    queryKey: ["categoryData"],
-    queryFn: () => retrieveCategories(), 
+    queryKey: ["categoryData"], // Unique identifier for the query
+    queryFn: () => retrieveCategories(), // Function to fetch category data
   });
 
+  // Handle loading and error states
   if (isLoading) return <div>Fetching Categories...</div>;
   if (error) return <div>An error occurred: {error.message}</div>;
 
+// Access the results from the fetched data (assuming 'results' property)
   const results = categories.results;
 
   //functions

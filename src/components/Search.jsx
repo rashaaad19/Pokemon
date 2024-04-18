@@ -4,29 +4,9 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-
-
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  {
-    title: "The Lord of the Rings: The Return of the King",
-    year: 2003,
-  },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  {
-    title: "The Lord of the Rings: The Fellowship of the Ring",
-    year: 2001,
-  },
-];
+//Styled Components
 const Container = styled.div`
   padding-left: 50px;
   display: flex;
@@ -47,46 +27,59 @@ const AutocompleteContainer = styled.div`
   border-radius: 5px;
 `;
 
-
-
+// Function to fetch Pokemon data asynchronously
 
 const retrievePokemons = async () => {
-  const response = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=1500");
-  return response.data;
+  try {
+    // Make an HTTP GET request to the PokéAPI using Axios
+    const response = await axios.get(
+      "https://pokeapi.co/api/v2/pokemon?limit=1500"
+    );
+
+    // Check for successful response (status code 200)
+    if (response.status === 200) {
+      // Extract the data from the response object
+      return response.data;
+    } else {
+      // Handle errors if the response status is not 200
+      console.error("Error fetching Pokemon data:", response.statusText);
+      throw new Error("Failed to retrieve Pokemon data"); // Re-throw for potential error handling in caller
+    }
+  } catch (error) {
+    // Handle any other errors during the request
+    console.error("Error fetching Pokemon data:", error);
+    throw error; // Re-throw for potential error handling in caller
+  }
 };
 
-
-
 const Search = () => {
+  const navigate = useNavigate(); // Get the navigate function for navigation
 
-const navigate=useNavigate();
-
-
+  // Destructure the returned object from useQuery
   const {
-    data: pokemons,
-    error,
-    isLoading,
+    data: pokemons, // Data fetched from the query, named 'pokemons'
+    error, //Error object if the query failed
+    isLoading, // Boolean indicating if the query is still loading
   } = useQuery({
-    queryKey: ["pokemonData"],
-    queryFn: () => retrievePokemons(), 
+    queryKey: ["pokemonData"], // Unique identifier for the query
+    queryFn: () => retrievePokemons(), // Function to fetch pokemons data
   });
 
+  // Handle loading and error states
   if (isLoading) return <div>Fetching Categories...</div>;
   if (error) return <div>An error occurred: {error.message}</div>;
 
+  // Access the results from the fetched data (assuming 'results' property)
   const results = pokemons.results;
-console.log(results)
 
-
-
-const handleSelect = (event, value) => {
-  if (value) {
-    const selectedPokemon=value;
-    navigate(`${selectedPokemon}`)
-    console.log('Selected Pokemon:', value); 
-    console.log(event)
-  }
-};
+  // Function triggered when a selection is made in the Autocomplete component
+  const handleSelect = (event, value) => {
+    if (value) {
+      // Check if a value is actually selected
+      const selectedPokemon = value; //Extract the name of the selected Pokemon
+      navigate(`${selectedPokemon}`); // Navigate to the Pokemon Page
+    }
+  };
 
   return (
     <>
@@ -102,7 +95,6 @@ const handleSelect = (event, value) => {
               <TextField {...params} label="Search For Pokemons" />
             )}
             onChange={handleSelect} // Handle selection event
-
           />
         </AutocompleteContainer>
       </Container>

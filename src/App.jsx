@@ -3,7 +3,6 @@ import "./App.css";
 //React router
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import CategoryCard from "./components/CategoryCard";
 //React query
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

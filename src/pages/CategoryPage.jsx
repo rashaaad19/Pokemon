@@ -1,10 +1,9 @@
 import axios from "axios";
 
-import { useLoaderData, useParams, json } from "react-router";
+import { useLoaderData, json } from "react-router";
 import { Link } from "react-router-dom";
 
 import styled from "styled-components";
-
 
 //     Styled Components
 
@@ -34,7 +33,6 @@ const CategoryPage = () => {
   const pokemons = pokemonData.pokemon;
   return (
     <>
-
       <CardList>
         {pokemons.map((pokemon) => (
           <Card
@@ -65,5 +63,4 @@ export const loader = async ({ params }) => {
 
   //returning the response data to use as Loader data
   return response.data;
-
 };

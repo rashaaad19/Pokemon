@@ -66,6 +66,10 @@ const PokemonPage = () => {
   const statsName = stats.map((pokemon) => pokemon.name);
   const statsValue = stats.map((pokemon) => pokemon.stat);
 
+
+
+
+  
   //Chart options
   const chartData = {
     series: [
@@ -93,8 +97,7 @@ const PokemonPage = () => {
         labels: {
           style: {
             colors: ["white", "white", "white", "white", "white", "white"],
-            fontWeight:'bold',
-              
+            fontWeight: "bold",
           },
         },
       },
@@ -156,13 +159,30 @@ const PokemonPage = () => {
 
 export default PokemonPage;
 
-export const loader = async ({ params }) => {
-  const name = params.pokemonName;
-  const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+// Asynchronous loader function for fetching Pokemon details
 
-  // Error handling
-  if (response.status !== 200) {
-    throw json({ message: "Error fetching Pokemons" }, { status: 500 });
+export const loader = async ({ params }) => {
+  // Extract Pokemon name from route parameters
+  const name = params.pokemonName;
+
+  // Build the PokéAPI URL for the specific Pokemon
+  const url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+
+  try {
+    // Make an HTTP GET request to fetch Pokemon data
+    const response = await axios.get(url);
+
+    // Check for successful response (status code 200)
+    if (response.status !== 200) {
+      // Handle errors if the response status is not 200
+      throw json({ message: "Error fetching Pokemon" }, { status: 500 });
+    }
+
+    // Extract the Pokemon data from the response
+    return response.data;
+  } catch (error) {
+    // Handle any errors during the request
+    console.error("Error fetching Pokemon data:", error);
+    throw error; // Re-throw for potential error handling in caller
   }
-  return response.data;
 };
