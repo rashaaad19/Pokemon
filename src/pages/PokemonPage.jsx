@@ -1,54 +1,58 @@
 import axios from "axios";
+
 import { json, useLoaderData } from "react-router";
+
 import styled from "styled-components";
 
+import RadarChart from "../components/RadarChart";
 
+//Styled components
 
-
-
-  //Styled components
-
-  const Wrapper = styled.div`
-    background-color: #000000e8;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  `;
-  const PokemonHeader = styled.h1`
-    color: orangered;
-    font-size: 60px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-    text-transform: capitalize;
-  `;
-  const PokemonInfo = styled.p`
-    color: whitesmoke;
-    font-size: 20px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-    text-transform: capitalize;
-  `;
-  const PokemonAbilities = styled.span`
-    color: whitesmoke;
-    font-size: 20px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-    text-transform: capitalize;
-  `;
-  const InfoWrapper = styled.div``;
-
+const Wrapper = styled.div`
+  background-color: #000000e8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const PokemonHeader = styled.h1`
+  color: #ffb240;
+  font-size: 50px;
+  font-family: cursive;
+  text-transform: capitalize;
+`;
+const InfoLabel = styled.span`
+  color: white;
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  text-transform: capitalize;
+`;
+const PokemonInfo = styled.p`
+  color: #ffb240;
+  font-size: 20px;
+  font-family: fantasy;
+  text-transform: capitalize;
+`;
+const PokemonAbilities = styled.span`
+  color: #ffb240;
+  font-size: 20px;
+  font-family: fantasy;
+  text-transform: capitalize;
+`;
+const InfoWrapper = styled.div`
+  margin-block: 20px;
+`;
+const PokemonImg = styled.img`
+  max-width: 15rem;
+`;
 
 const PokemonPage = () => {
-
   const pokemonData = useLoaderData();
   console.log(pokemonData);
 
-
-
   //functions
 
-    // Extract the abilities and processing the text
+  // Extract the abilities and processing the text
   const abilities = pokemonData.abilities.map((pokemon) => {
     //Capitalizing first character in the ability
     const capitalizedName =
@@ -58,29 +62,73 @@ const PokemonPage = () => {
   });
 
   //Extracte the stats of each pokemon
-  const stats=pokemonData.stats.map(pokemon=>{
+  const stats = pokemonData.stats.map((pokemon) => {
+    return { name: pokemon.stat.name, stat: pokemon.base_stat };
+  });
+  const statsName = stats.map((pokemon) => pokemon.name);
+  const statsValue = stats.map((pokemon) => pokemon.stat);
 
-    return{name:pokemon.stat.name,stat:pokemon.base_stat}
-  })
-console.log(stats)
+  //Chart options
+  const chartData = {
+    series: [
+      {
+        name: "Series 1",
+        data: statsValue,
+      },
+    ],
+    options: {
+      chart: {
+        height: 350,
+        type: "radar",
+      },
+      title: {
+        text: "Pokemon Stats",
+      },
+      xaxis: {
+        categories: statsName,
+        
+      },
+      yaxis: {
+       show:false
+      },
+      
+    },
+  };
 
   return (
     <>
       <Wrapper>
         <PokemonHeader>{pokemonData.name}</PokemonHeader>
-        <img src={pokemonData.sprites.other.home.front_default} alt="Pokemon" />
+
+        {/* Conditional rendring for image src as not all pokemon have dream_world image */}
+        <PokemonImg
+          src={
+            pokemonData.sprites.other.dream_world.front_default
+              ? pokemonData.sprites.other.dream_world.front_default
+              : pokemonData.sprites.other.home.front_default
+          }
+          alt="Pokemon"
+        />
         <InfoWrapper>
-          <PokemonAbilities>Pokemon Abilities : </PokemonAbilities>
+          <InfoLabel>Pokemon Abilities : </InfoLabel>
 
           {/* Seperating each ability with comma */}
           <PokemonAbilities>{abilities.join(" , ")}</PokemonAbilities>
 
           <PokemonInfo>
-            Base Experience : {pokemonData.base_experience}
+            <InfoLabel> Base Experience : </InfoLabel>
+            {pokemonData.base_experience}
           </PokemonInfo>
-          <PokemonInfo>Height : {pokemonData.height}</PokemonInfo>
-          <PokemonInfo>Weight : {pokemonData.weight}</PokemonInfo>
+          <PokemonInfo>
+            <InfoLabel> Height : </InfoLabel>
+
+            {pokemonData.height}
+          </PokemonInfo>
+          <PokemonInfo>
+            <InfoLabel>Weight :</InfoLabel> {pokemonData.weight}
+          </PokemonInfo>
         </InfoWrapper>
+        <RadarChart series={chartData.series} options={chartData.options} />
       </Wrapper>
     </>
   );
