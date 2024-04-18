@@ -46,7 +46,6 @@ const PokemonImg = styled.img`
 
 const PokemonPage = () => {
   const pokemonData = useLoaderData();
-  console.log(pokemonData);
 
   //functions
 
