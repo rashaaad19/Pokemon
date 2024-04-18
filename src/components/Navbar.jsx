@@ -1,20 +1,22 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const NavItem=styled(NavLink)`
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
-    color: peachpuff;
-    margin-bottom: 20px;
+    color: #fff6ed;
+`
+const NavHeader=styled.header`
+  padding-bottom:10px;
 `
 const Navbar = () => {
   return (
-    <header>
+    <NavHeader>
       <nav>
         <ul>
-          <NavItem to="">Main Page</NavItem>
+          <NavItem to="">Home</NavItem>
         </ul>
       </nav>
-    </header>
+    </NavHeader>
   );
 };
 

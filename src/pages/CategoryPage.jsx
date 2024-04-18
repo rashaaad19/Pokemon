@@ -16,7 +16,7 @@ const ListItem = styled.li`
   list-style: none;
 `;
 const Card = styled(Link)`
-  background-color: plum;
+  background-color: #ff9a03;
   color: black;
   font-size: 24px;
   font-weight: bold;

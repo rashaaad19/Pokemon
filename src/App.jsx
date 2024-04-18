@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CategoryPage, { loader as categoriesLoader } from "./pages/CategoryPage";
 import PokemonPage, { loader as pokemonLoader } from "./pages/PokemonPage";
 import RootPage from "./pages/RootPage";
+import MainPage from "./pages/MainPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -20,7 +21,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <CategoryCard />,
+          element: <MainPage />,
         },
         {
           path: "/category/:categoryId",
