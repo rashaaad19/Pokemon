@@ -1,4 +1,12 @@
 import { Autocomplete, TextField } from "@mui/material";
+import styled from "styled-components";
+
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+import { useNavigate } from 'react-router-dom';
+
+
 
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },
@@ -19,19 +27,85 @@ const top100Films = [
     year: 2001,
   },
 ];
+const Container = styled.div`
+  padding-left: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  h1 {
+    color: #ffdda9;
+    margin-block: 30px 10px;
+    font-family: monospace;
+    font-weight: bold;
+  }
+`;
+const AutocompleteContainer = styled.div`
+  background: white;
+  width: fit-content;
+  padding: 8px;
+  border-radius: 5px;
+`;
+
+
+
+
+const retrievePokemons = async () => {
+  const response = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=1500");
+  return response.data;
+};
+
+
 
 const Search = () => {
+
+const navigate=useNavigate();
+
+
+  const {
+    data: pokemons,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["pokemonData"],
+    queryFn: () => retrievePokemons(), 
+  });
+
+  if (isLoading) return <div>Fetching Categories...</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
+
+  const results = pokemons.results;
+console.log(results)
+
+
+
+const handleSelect = (event, value) => {
+  if (value) {
+    const selectedPokemon=value;
+    navigate(`${selectedPokemon}`)
+    console.log('Selected Pokemon:', value); 
+    console.log(event)
+  }
+};
+
   return (
     <>
-    <div style={{display:"block",background:"white"}}>
-      <h1>Search</h1>
-      <Autocomplete
-        id="free-solo-demo"
-        freeSolo
-        options={top100Films.map((option) => option.title)}
-        renderInput={(params) => <TextField {...params} label="freeSolo" />}
-      />
-    </div>
+      <Container>
+        <h1>Search</h1>
+        <AutocompleteContainer>
+          <Autocomplete
+            id="free-solo-demo"
+            freeSolo
+            options={results.map((option) => option.name)}
+            sx={{ width: "30rem" }} // Inline styling with Material-UI sx prop
+            renderInput={(params) => (
+              <TextField {...params} label="Search For Pokemons" />
+            )}
+            onChange={handleSelect} // Handle selection event
+
+          />
+        </AutocompleteContainer>
+      </Container>
     </>
   );
 };

@@ -24,6 +24,11 @@ function App() {
           element: <MainPage />,
         },
         {
+          path: ":pokemonName",
+          element: <PokemonPage />,
+          loader: pokemonLoader,
+        },
+        {
           path: "/category/:categoryId",
           children: [
             {

@@ -38,7 +38,7 @@ const CategoryCard = () => {
     isLoading,
   } = useQuery({
     queryKey: ["categoryData"],
-    queryFn: () => retrieveCategories(), // Fetch category details based on ID
+    queryFn: () => retrieveCategories(), 
   });
 
   if (isLoading) return <div>Fetching Categories...</div>;
