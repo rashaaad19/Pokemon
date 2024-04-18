@@ -30,12 +30,10 @@ const Card = styled(Link)`
 const CategoryPage = () => {
   //react router
   const pokemonData = useLoaderData();
-  let { categoryId } = useParams();
   //extracting the pokemon information from the response
   const pokemons = pokemonData.pokemon;
   return (
     <>
-      <h1>{categoryId}</h1>
 
       <CardList>
         {pokemons.map((pokemon) => (

@@ -9,8 +9,6 @@ import RadarChart from "../components/RadarChart";
 //Styled components
 
 const Wrapper = styled.div`
-  background-color: #000000e8;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +20,7 @@ const PokemonHeader = styled.h1`
   text-transform: capitalize;
 `;
 const InfoLabel = styled.span`
-  color: white;
+  color: #ffffff;
   font-size: 20px;
   font-family: "Times New Roman", Times, serif;
   text-transform: capitalize;
@@ -78,20 +76,42 @@ const PokemonPage = () => {
     ],
     options: {
       chart: {
-        height: 350,
         type: "radar",
+        toolbar: false,
       },
       title: {
         text: "Pokemon Stats",
+        style: {
+          color: `white`,
+          fontSize: "20px",
+          fontFamily: '"Times New Roman", Times, serif',
+        },
       },
+
       xaxis: {
         categories: statsName,
-        
+        labels: {
+          style: {
+            colors: ["white", "white", "white", "white", "white", "white"],
+            fontWeight:'bold',
+              
+          },
+        },
       },
       yaxis: {
-       show:false
+        show: false,
       },
-      
+      //fix width for mobile screens only
+      responsive: [
+        {
+          breakpoint: 524,
+          options: {
+            chart: {
+              width: 300,
+            },
+          },
+        },
+      ],
     },
   };
 

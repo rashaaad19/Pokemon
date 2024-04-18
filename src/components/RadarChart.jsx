@@ -8,7 +8,8 @@ const RadarChart = ({ series, options }) => {
           options={options}
           series={series}
           type="radar"
-          height={300}
+          width={450}
+          height={400}
         />
       </div>
     </>

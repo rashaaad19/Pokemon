@@ -10,28 +10,36 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //Router Components
 import CategoryPage, { loader as categoriesLoader } from "./pages/CategoryPage";
 import PokemonPage, { loader as pokemonLoader } from "./pages/PokemonPage";
+import RootPage from "./pages/RootPage";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <CategoryCard />,
-    },
-    {
-      path: "/category/:categoryId",
+      element: <RootPage />,
       children: [
         {
           index: true,
-          element: <CategoryPage />,
-          loader: categoriesLoader,
+          element: <CategoryCard />,
         },
         {
-          path: "/category/:categoryId/:pokemonName",
-          element: <PokemonPage />,
-          loader: pokemonLoader,
+          path: "/category/:categoryId",
+          children: [
+            {
+              index: true,
+              element: <CategoryPage />,
+              loader: categoriesLoader,
+            },
+            {
+              path: "/category/:categoryId/:pokemonName",
+              element: <PokemonPage />,
+              loader: pokemonLoader,
+            },
+          ],
         },
       ],
     },
+    {},
   ]);
 
   const queryClient = new QueryClient();
